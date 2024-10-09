@@ -10,8 +10,10 @@ class CarController extends Controller
     public function index()
     {
         // Fetch all cars from the database
-        $cars = Car::all();
-
+        // $cars = Car::with(['brand', 'brands'])->get();
+        $cars = Car::join('brands', 'cars.brand', '=', 'brands.id')
+        ->select('brands.name as brand_name', 'cars.id', 'cars.model', 'cars.image', 'cars.type', 'cars.color', 'cars.manufacturingYear', )
+        ->get();
         // Return the cars as a JSON response
         return response()->json($cars);
     }
@@ -19,7 +21,8 @@ class CarController extends Controller
 
     public function show($id)
     {
-        $car = Car::with('comments')->find($id);
+        $carValues = Car::find($id);
+        $car = Car::with(['Comments', 'Brand'])->find($id);
 
         if ($car) {
             return response()->json($car);

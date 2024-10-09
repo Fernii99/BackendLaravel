@@ -3,17 +3,22 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models\Car;
 
 class Comment extends Model
 {
     use HasFactory;
-    protected $table = 'car_comments';
     protected $fillable = ['comment_id', 'car_id', 'comment_text', 'user', 'created_at'];
 
-    // Define the relationship to the Car model
-    public function car()
+    /**
+     * Get the comments that owns the car.
+     */
+    public function Car(): BelongsTo
     {
-        return $this->belongsTo(Car::class, 'id');
+        return $this->belongsTo(Car::class);
     }
+
 }

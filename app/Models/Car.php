@@ -3,23 +3,42 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models\Comment;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Car extends Model
 {
     use HasFactory;
 
-    protected $table = 'car';
+    protected $fillable = ['id', 'brand', 'model', 'image', 'type', 'color', 'manufacturingYear', 'concesionaire_id' ];
 
-    protected $fillable = ['id', 'brand_id', 'image', 'model', 'type', 'color', 'manufacturingYear']; // Adjust according to your table structure
-
-    public function brand()
+    /**
+     * Get the comments for the blog post.
+     */
+    public function Comments(): HasMany
     {
-        return $this->belongsTo(Brand::class, 'brand_id');
+        return $this->hasMany(Comment::class);
     }
 
-    public function comments()
+    /**
+     * Get the comments for the blog post.
+     */
+    public function Brand(): HasOne
     {
-        return $this->hasMany(Comment::class, 'car_id');
+        return $this->hasOne( Brand::class, 'id', 'id');
     }
+
+    /**
+     * Get the comments for the blog post.
+    */
+    public function Concessionaire(): BelongsTo
+    {
+        return $this->belongsTo(Concessionaire::class);
+    }
+
+
 }

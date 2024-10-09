@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\ConcessionaireController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,12 @@ Route::get('/cars/{id}', [CarController::class, 'show']);
 
 Route::get('/comments/{id}', [CommentController::class, 'findComments']);
 Route::post('/comments/{id}', [CommentController::class, 'postComment']);
+
+
+/**
+ * BRANDS ROUTES
+ */
+ Route::get('/concessionaires', [ConcessionaireController::class, 'index']);       // GET all brands
 
 
 

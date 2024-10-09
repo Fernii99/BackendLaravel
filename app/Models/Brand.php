@@ -3,22 +3,40 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models\Concessionaire;
+use App\Models\Car;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Brand extends Model
 {
     use HasFactory;
-    protected $fillable = ['name'];
+    protected $fillable = ['id', 'name'];
 
-    public function concessionaires()
+    /**
+     * Get the user that owns the phone.
+    */
+    public function id(): BelongsTo
     {
-        return $this->hasMany(Concessionaire::class); // One brand has many concessionaires
+        return $this->belongsTo(Car::class);
     }
 
-
-    public function car()
+    /**
+     * Get the comments for the blog post.
+     */
+    public function Cars(): HasMany
     {
-        return $this->belongsToMany(Car::class, 'brand');
+        return $this->hasMany(Car::class);
+    }
 
+    /**
+     * The users that belong to the role.
+     */
+    public function Concessionaire  (): BelongsToMany
+    {
+        return $this->belongsToMany(ConcessionaireBrand::class, 'ConcessionaireBrand', 'brand_id', 'concessionaire_id');
     }
 }

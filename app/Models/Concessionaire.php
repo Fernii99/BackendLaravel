@@ -3,21 +3,26 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 
-class concessionaire extends Model
+use App\Models\Car;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
+class Concessionaire extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['Concessionaire'];
+    protected $fillable = ['id', 'brands', 'cars'];
 
-    public function brand()
+    public function Cars(): HasMany
     {
-        return $this->belongsTo(Brand::class); // Each concessionaire belongs to one brand
+        return $this->hasMany(Car::class);
     }
 
-    public function vehicle()
+    public function Brand(): BelongsToMany
     {
-        return $this->belongsTo(Brand::class); // Each concessionaire belongs to one brand
+        return $this->belongsToMany(Brand::class, 'ConcessionaireBrand', 'concessionaire_id', 'brand_id');
     }
+
 }

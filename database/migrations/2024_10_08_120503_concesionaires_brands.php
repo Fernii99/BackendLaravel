@@ -16,7 +16,7 @@ class ConcesionairesBrands extends Migration
     {
         Schema::create('concesionaires_brands', function (Blueprint $table) {
             // Foreign key to Concessionaires
-            $table->foreignId('concesionaire_id')->constrained('concessionaires', 'concessionaire_id')->onDelete('cascade');
+            $table->foreignId('concesionaire_id')->constrained('concesionaire', 'concessionaire_id')->onDelete('cascade');
 
             // Foreign key to Brands
             $table->foreignId('brand_id')->constrained('brands', 'brand_id')->onDelete('cascade');
