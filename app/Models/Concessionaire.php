@@ -22,7 +22,7 @@ class Concessionaire extends Model
 
     public function Brand(): BelongsToMany
     {
-        return $this->belongsToMany(Brand::class, 'ConcessionaireBrand', 'concessionaire_id', 'brand_id');
+        return $this->belongsToMany(Brand::class, 'concesionaires_brands', 'concessionaire_id', 'brand_id');
     }
 
 }

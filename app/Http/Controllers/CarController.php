@@ -21,8 +21,8 @@ class CarController extends Controller
 
     public function show($id)
     {
-        $carValues = Car::find($id);
-        $car = Car::with(['Comments', 'Brand'])->find($id);
+        // $car = Car::find($id);
+        $car = Car::with(['comments'])->find($id);
 
         if ($car) {
             return response()->json($car);

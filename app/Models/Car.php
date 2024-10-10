@@ -21,15 +21,17 @@ class Car extends Model
      */
     public function Comments(): HasMany
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class );
     }
+
+
 
     /**
      * Get the comments for the blog post.
      */
     public function Brand(): HasOne
     {
-        return $this->hasOne( Brand::class, 'id', 'id');
+        return $this->hasOne( Brand::class, 'brand_id', 'id');
     }
 
     /**

@@ -9,6 +9,7 @@ class ConcessionaireBrand extends Model
 {
     use HasFactory;
 
+    protected $table = "concesionaires_brands";
     protected $fillable = ['id', 'brand_id', 'concessionaire_id'];
 
 

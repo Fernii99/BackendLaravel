@@ -35,8 +35,8 @@ class Brand extends Model
     /**
      * The users that belong to the role.
      */
-    public function Concessionaire  (): BelongsToMany
+    public function Concessionaire (): BelongsToMany
     {
-        return $this->belongsToMany(ConcessionaireBrand::class, 'ConcessionaireBrand', 'brand_id', 'concessionaire_id');
+        return $this->belongsToMany(ConcessionaireBrand::class, 'concessionaires_brands', 'brand_id', 'concessionaire_id');
     }
 }

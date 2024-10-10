@@ -25,14 +25,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/cars', [CarController::class, 'index']);
 Route::get('/cars/{id}', [CarController::class, 'show']);
 
+
+/**
+ * COMMNENTS ROUTES
+ */
 Route::get('/comments/{id}', [CommentController::class, 'findComments']);
-Route::post('/comments/{id}', [CommentController::class, 'postComment']);
+Route::post('/comments/new', [CommentController::class, 'store']);
 
 
 /**
- * BRANDS ROUTES
+ * CONCESSIONAIRES ROUTES
  */
- Route::get('/concessionaires', [ConcessionaireController::class, 'index']);       // GET all brands
+ Route::get('/concessionaires', [ConcessionaireController::class, 'index']);
 
 
 

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Car;
 use App\Models\Comment;
+use Exception;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -19,27 +19,17 @@ class CommentController extends Controller
         }
     }
 
-    public function postComment(Request $request){
-
-        $validRequest = $request->validate([
-            'user' => 'required|string',
-            "comment_text" => 'required|string',
-            "carId" => "required|string",
+    public function store(Request $request)
+    {
+        // Validate the request data
+        $validatedData = $request->validate([
+            'car_id' => 'required',
+            'user' => 'required',
+            'comment_text' => 'required',
         ]);
 
-        $car = Car::findOrFail($validRequest['carId']);
-
-        $newComment = new Comment();
-        $newComment->car_id = $validRequest['carId'];
-        $newComment->comment_text = $validRequest['comment_text'];
-        $newComment->user = $validRequest['user'];
-
-        $newComment->save();
-
-        return response()->json([
-            'message' => 'Comment added successfully',
-            'data' => $newComment,
-        ], 201);
+        $comment = new Comment();
+        $comment::create($validatedData);
 
     }
 }
