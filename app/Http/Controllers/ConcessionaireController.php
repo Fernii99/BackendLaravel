@@ -20,9 +20,13 @@ class ConcessionaireController extends Controller
 
     public function find($id)
     {
-        // Eager load cars and brands to minimize database queries
-        $concessionaires = Concessionaire::with(['Cars', 'Brand'])->find($id);
+        $concessionaire = Concessionaire::with(['Cars.comments', 'Brand'])->find($id);
 
-        return response()->json($concessionaires);
+        // Check if the concessionaire exists
+        if (!$concessionaire) {
+            return response()->json(['error' => 'Concessionaire not found'], 404);
+        }
+
+        return response()->json($concessionaire);
     }
 }

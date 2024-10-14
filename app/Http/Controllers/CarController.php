@@ -52,28 +52,31 @@ class CarController extends Controller
     {
         // Validate the request
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // optional validation
-            // other validation rules for fields
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'brand' => 'required|string|max:255',
+            'model' => 'required|string|max:255',
+            'color' => 'required|string|max:50',
+            'manufacturingYear' => 'required|integer',
+            'type' => 'required|string|max:50',
         ]);
 
         // Check if an image is uploaded
         if ($request->hasFile('image')) {
             // Store the image in the 'public/cars' directory
-            $imagePath = $request->file('image')->store('carImages', 'public');
+            $imagePath = $request->file('image')->store('public/storage/carImages');
 
             // Get the URL to the stored image
-            $imageUrl = Storage::url($imagePath);
+            $imageUrl = 'http://localhost:8000' . Storage::url($imagePath);
 
             // Save the image URL and other details in the database
             $car = new Car();
-            $car->brand = $request->brand; // example of other fields
-            $car->car_model = $request->model; // example of other fields
+            $car->brand = $request->brand;
+            $car->car_model = $request->model;
             $car->color = $request->color;
-            $car->image = $imageUrl; // example of other fields
+            $car->image = $imageUrl;
             $car->manufacturingYear = $request->manufacturingYear;
             $car->type = $request->type;
-            $car->concessionaire_id = 2; // save the image URL
-             // save the image URL
+            $car->concessionaire_id = $request->concessionaire_id ?? 2;
             $car->save();
 
             return redirect()->back()->with('success', 'Car added successfully!');

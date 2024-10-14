@@ -38,7 +38,7 @@ Route::post('/comments/new', [CommentController::class, 'store']);
  * CONCESSIONAIRES ROUTES
  */
  Route::get('/concessionaires', [ConcessionaireController::class, 'index']);
-
+ Route::get('/concessionaire/{id}', [ConcessionaireController::class, 'find']);
 
 
 /**
