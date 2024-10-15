@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use App\Models\Car;
+use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Storage;
 
 class CarController extends Controller
@@ -83,6 +84,26 @@ class CarController extends Controller
         }
 
         return redirect()->back()->with('error', 'Image upload failed!');
+    }
+
+    public function update(Request $request, $id){
+        $car = Car::findOrFail($id);
+
+        $car->update( [
+            //DATABASE FIELD NAME => REQUEST FIELD NAME
+            'brand' => is_numeric($request->input('brand')) ? $request->input('brand') : $car->brand,
+            'car_model' => $request->input('model'),
+            'type' => $request->input('type'),
+            'color' => $request->input('color'),
+            'manufacturingYear' => $request->input('manufacturingYear'),
+            'created_at' => $car->created_at,
+            'updated_at' => $car->updated_at
+        ]);
+
+        return response()->json([
+            'message' => 'Car updated successfully!',
+            'car' => $car,
+        ], 200);
     }
 
 
