@@ -1,11 +1,14 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CarController;
+
+use App\Http\Controllers\ConcessionaireController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\BrandController;
-use App\Http\Controllers\ConcessionaireController;
+use App\Http\Controllers\ApiController;
+use App\Http\Controllers\CarController;
+
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +29,7 @@ Route::get('/cars', [CarController::class, 'index']);
 Route::get('/cars/{id}', [CarController::class, 'show']);
 Route::post('/cars/new', [CarController::class, 'store']);
 Route::put('/cars/update/{id}', [CarController::class, 'update']);
+Route::get('/concessionaire/{id}/comments', [CarController::class, 'findConcessionaireComments']);
 
 
 /**
@@ -44,10 +48,17 @@ Route::post('/comments/new', [CommentController::class, 'store']);
 
 /**
  * BRANDS ROUTES
- */
+**/
 
 Route::get('/brands', [BrandController::class, 'index']);       // GET all brands
 Route::post('/brands', [BrandController::class, 'store']);      // POST create brand
 Route::get('/brands/{id}', [BrandController::class, 'show']);   // GET a specific brand
 Route::put('/brands/{id}', [BrandController::class, 'update']); // PUT update brand
 Route::delete('/brands/{id}', [BrandController::class, 'destroy']); // DELETE brand
+
+
+/**
+ ** ROUTES TO EXTERNAL API ROUTES
+ */
+
+ Route::get('/coffees', [ApiController::class, 'getExternalData']);

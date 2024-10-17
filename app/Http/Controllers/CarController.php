@@ -5,23 +5,42 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use Illuminate\Http\Request;
 use App\Models\Car;
+use App\Models\Comment;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Storage;
 
 class CarController extends Controller
 {
+
+    //FIND ALL THE CARS STORED IN THE DATABASE
     public function index()
     {
         // Fetch all cars from the database
         // $cars = Car::with(['brand', 'brands'])->get();
         $cars = Car::join('brands', 'cars.brand', '=', 'brands.id')
-        ->select('brands.name as brand_name', 'cars.id', 'cars.car_model', 'cars.image', 'cars.type', 'cars.color', 'cars.manufacturingYear', )
+        ->select('brands.name as brand_name', 'brands.id as brand_id', 'cars.id', 'cars.car_model', 'cars.image', 'cars.type', 'cars.color', 'cars.manufacturingYear', )
         ->get();
         // Return the cars as a JSON response
         return response()->json($cars);
     }
 
+    public function findConcessionaireComments($id)
+    {
+        $comments = Comment::whereHas('car', function ($query) use ($id) {
+            $query->where('concessionaire_id', $id);
+        })
+        ->orderBy('created_at', 'desc') // Assuming you want to order by the creation date of the comments
+        ->get();
 
+        if ($comments) {
+            return response()->json($comments);
+        } else {
+            return response()->json(['message' => 'no comments for this car'], 404);
+        }
+    }
+
+
+    //FIND ONE CAR INFORMATION WITH ITS COMMENTS
     public function show($id)
     {
         // $car = Car::find($id);

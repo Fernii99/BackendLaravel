@@ -32,8 +32,10 @@ class BrandController extends Controller
     // Display the specified brand.
     public function show($id)
     {
-        $brand = Brand::findOrFail($id);
-        return response()->json($brand);
+        $brands = Brand::whereHas('concessionaires', function ($query) use ($id) {
+            $query->where('id', $id);
+        })->get();
+        return response()->json($brands);
     }
 
     // Update the specified brand in storage.
