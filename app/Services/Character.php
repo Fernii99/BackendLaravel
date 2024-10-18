@@ -1,27 +1,28 @@
 <?php
 
+namespace App\Services;
+
 class Character
 {
-    public $data;      // Array to hold character objects
-    public $status;    // Boolean status
+    public $data;
+    public $status;
     public $message;
 
 
     // Constructor
-    public function __construct($status, $message)
+    public function __construct()
     {
-        $this->status = $status;       // Set status
-        $this->message = $message;     // Set message
         $this->data = [];              // Initialize as an empty array
     }
 
 
-    public function addCharacter($name, $gender, $status)
+    public function addCharacter($name, $gender, $image)
     {
         $this->data[] = [              // Append character data to the data array
             'name' => $name,
             'gender' => $gender,
-            'status' => $status,
+            'image' => $image,
+
         ];
     }
     // Method
@@ -30,8 +31,6 @@ class Character
         // Structure the response
         $response = [
             'data' => $this->data,      // Character array
-            'status' => $this->status,  // Status
-            'message' => $this->message // Message
         ];
 
         // Return as JSON

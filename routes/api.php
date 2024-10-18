@@ -3,11 +3,11 @@
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\ConcessionaireController;
+use App\Http\Controllers\CharactersController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\CarController;
-
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,22 +33,22 @@ Route::get('/concessionaire/{id}/comments', [CarController::class, 'findConcessi
 
 
 /**
- * COMMNENTS ROUTES
+ ** COMMNENTS ROUTES
  */
 Route::get('/comments/{id}', [CommentController::class, 'findComments']);
 Route::post('/comments/new', [CommentController::class, 'store']);
 
 
 /**
- * CONCESSIONAIRES ROUTES
+ ** CONCESSIONAIRES ROUTES
  */
  Route::get('/concessionaires', [ConcessionaireController::class, 'index']);
  Route::get('/concessionaire/{id}', [ConcessionaireController::class, 'find']);
 
 
 /**
- * BRANDS ROUTES
-**/
+ ** BRANDS ROUTES
+ */
 
 Route::get('/brands', [BrandController::class, 'index']);       // GET all brands
 Route::post('/brands', [BrandController::class, 'store']);      // POST create brand
@@ -61,4 +61,5 @@ Route::delete('/brands/{id}', [BrandController::class, 'destroy']); // DELETE br
  ** ROUTES TO EXTERNAL API ROUTES
  */
 
- Route::get('/coffees', [ApiController::class, 'getExternalData']);
+ Route::get('/characters/getall', [CharactersController::class, 'getAllCharacters']);
+
