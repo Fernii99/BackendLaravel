@@ -61,5 +61,6 @@ Route::delete('/brands/{id}', [BrandController::class, 'destroy']); // DELETE br
  ** ROUTES TO EXTERNAL API ROUTES
  */
 
- Route::get('/characters/getall', [CharactersController::class, 'getAllCharacters']);
+Route::get('/characters/getall', [CharactersController::class, 'getAllCharacters']);
+Route::get('/characters/filtered', [CharactersController::class, 'getFilteredCharacters']);
 
