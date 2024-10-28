@@ -38,32 +38,36 @@ class TheOfficeController extends Controller
 
     public function getFilteredCharacters($params) {
 
-        $name = $params['name'] ?? null;
-        $gender = $params['gender'] ?? null;
-        $image = $params['image'] ?? null;
+        $name = $params['name'] == "" ? "" : $params['name'];
+        $gender = $params['gender'] == "" ? null : $params['gender'];
+        $image = $params['image'] === "yes" ? true : false;
 
         $response = Http::get('https://theofficeapi.dev/api/characters');
+        $character = new Character();
 
         if($response->successful()){
-
             $data = $response->json();
 
-            if (isset($data['results'])) {
-                 // Use array_filter on $data['results']
-            $filteredCharacters = array_filter($data['results'], function ($character) use ($name, $gender, $image) {
-                // Check if any parameter matches
-                return (
-                    (empty($name) || strpos($character['name'], $name) !== false) ||
-                    (empty($gender) || $character['gender'] === $gender) ||
-                    ( !empty($image) && !empty($character['image']) && stripos($character['image'], $image) !== false) // Image filter (only if image is set)
-                );
-                    });
-                // Return the JSON response with the filtered characters
-            return response()->json(array_values($filteredCharacters));
+            if (isset($data['results'])) { // Check if 'items' key exists
+                foreach ($data['results'] as $item) {
+                    if (
+                        ($name != "" ? strpos(strtolower($item['name']), strtolower($name)) !== false :true) &&
+                        ($item['gender'] !== "Select Gender" ?  true : strtolower($item['gender']) === strtolower($gender) )
+                    ) {
+                        // Add character once the conditions match
+                        $character->addCharacter(
+                            $item['name'],
+                            $item['gender'],
+                            null
+                        );
+                    }
+                }
+
+                return $character->getResponse();
             } else {
-                // If 'items' key is not found, return an error
                 return response()->json(['error' => 'Invalid data structure'], 400);
             }
+
         }else{
             return response()->json(['error' => 'Unable to fetch data from API'], $response->status());
         }

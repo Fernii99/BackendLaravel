@@ -106,6 +106,7 @@ class CarController extends Controller
     }
 
     public function update(Request $request, $id){
+        var_dump($request);
         $car = Car::findOrFail($id);
 
         $car->update( [

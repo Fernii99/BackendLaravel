@@ -39,14 +39,14 @@ class CharactersController extends Controller
 
         $params = $request->all();
 
-        $futuramaResponse = $this->futuramaController->getFilteredCharacters($params);
         $gotResponse = $this->gotController->getFilteredCharacters($params);
+        $futuramaResponse = $this->futuramaController->getFilteredCharacters($params);
         $theOfficeResponse = $this->theOfficeController->getFilteredCharacters($params);
 
         $allCharacters = [
-            'futurama' => $futuramaResponse->getData(),
-            'got' => $gotResponse->getData(),
-            'theOffice' => $theOfficeResponse->getData(),
+            'Game of Thrones' => $gotResponse->getData(),
+            'Futurama' => $futuramaResponse->getData(),
+            'The Office' => $theOfficeResponse->getData(),
         ];
 
         return response()->json($allCharacters);

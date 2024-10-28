@@ -12,7 +12,7 @@ class GotController extends Controller
         $response = Http::get('https://thronesapi.com/api/v2/Characters');
 
         if($response->successful()){
-            $character = new Character(201, "Data successfully retrieved");
+            $character = new Character();
             $data = $response->json();
 
             if (isset($data)) {
@@ -37,33 +37,37 @@ class GotController extends Controller
     }
 
     public function getFilteredCharacters($params) {
-        print_r($params);
-        $name = $params['name'] ?? null;
-        $gender = $params['gender'] ?? null;
-        $image = $params['image'] ?? null;
 
-        $response = Http::get('https://theofficeapi.dev/api/characters');
+        $name = $params['name'] == "" ? null : $params['name'];
+        $gender = $params['gender'] == "" ? null : $params['name'];
+        $image = $params['image'] === "yes" ? true : false;
 
-        if($response->successful()){
+        $response = Http::get('https://thronesapi.com/api/v2/Characters');
+        $character = new Character();
 
+        if( $response->successful() ){
             $data = $response->json();
 
-            if (isset($data['results'])) {
-                 // Use array_filter on $data['results']
-            $filteredCharacters = array_filter($data['results'], function ($character) use ($name, $gender, $image) {
-                // Check if any parameter matches
-                return (
-                    (empty($name) || strpos($character['name'], $name) !== false) ||
-                    (empty($gender) || $character['gender'] === $gender) ||
-                    ( !empty($image) && !empty($character['image']) && stripos($character['image'], $image) !== false) // Image filter (only if image is set)
-                );
-                    });
-                // Return the JSON response with the filtered characters
-            return response()->json(array_values($filteredCharacters));
+            if (isset($data)) { // Check if 'items' key exists
+                foreach ($data as $item) {
+                    if
+                    (
+                        ($name != "" ? strpos(strtolower($item['fullName']), strtolower($name)) !== false :true) &&
+                        ($image == "yes" ? $item['imageUrl'] != null : $item['imageUrl'] == null)
+                    ) {
+                        // Add character once the conditions match
+                        $character->addCharacter(
+                            $item['fullName'],
+                            "",
+                            isset($item['imageUrl']) ? $item['imageUrl'] : null
+                        );
+                    }
+                }
+                return $character->getResponse();
             } else {
-                // If 'items' key is not found, return an error
                 return response()->json(['error' => 'Invalid data structure'], 400);
             }
+
         }else{
             return response()->json(['error' => 'Unable to fetch data from API'], $response->status());
         }
