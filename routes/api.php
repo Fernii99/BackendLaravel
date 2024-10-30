@@ -8,6 +8,7 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\cicarController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,11 +46,9 @@ Route::post('/comments/new', [CommentController::class, 'store']);
  Route::get('/concessionaires', [ConcessionaireController::class, 'index']);
  Route::get('/concessionaire/{id}', [ConcessionaireController::class, 'find']);
 
-
 /**
  ** BRANDS ROUTES
  */
-
 Route::get('/brands', [BrandController::class, 'index']);       // GET all brands
 Route::post('/brands', [BrandController::class, 'store']);      // POST create brand
 Route::get('/brands/{id}', [BrandController::class, 'show']);   // GET a specific brand
@@ -64,3 +63,6 @@ Route::delete('/brands/{id}', [BrandController::class, 'destroy']); // DELETE br
 Route::get('/characters/getall', [CharactersController::class, 'getAllCharacters']);
 Route::get('/characters/filtered', [CharactersController::class, 'getFilteredCharacters']);
 
+
+
+Route::get('/cicar', [CicarController::class, 'obtenerListaDeZonas']);

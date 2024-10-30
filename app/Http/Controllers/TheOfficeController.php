@@ -49,6 +49,7 @@ class TheOfficeController extends Controller
             $data = $response->json();
 
             if (isset($data['results'])) { // Check if 'items' key exists
+
                 foreach ($data['results'] as $item) {
                     if (
                         ($name != "" ? strpos(strtolower($item['name']), strtolower($name)) !== false :true) &&
