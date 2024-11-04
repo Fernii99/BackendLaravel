@@ -49,10 +49,10 @@ Route::post('/comments/new', [CommentController::class, 'store']);
 /**
  ** BRANDS ROUTES
  */
-Route::get('/brands', [BrandController::class, 'index']);       // GET all brands
-Route::post('/brands', [BrandController::class, 'store']);      // POST create brand
-Route::get('/brands/{id}', [BrandController::class, 'show']);   // GET a specific brand
-Route::put('/brands/{id}', [BrandController::class, 'update']); // PUT update brand
+Route::get('/brands', [BrandController::class, 'index']);           // GET all brands
+Route::post('/brands', [BrandController::class, 'store']);          // POST create brand
+Route::get('/brands/{id}', [BrandController::class, 'show']);       // GET a specific brand
+Route::put('/brands/{id}', [BrandController::class, 'update']);     // PUT update brand
 Route::delete('/brands/{id}', [BrandController::class, 'destroy']); // DELETE brand
 
 
@@ -65,4 +65,11 @@ Route::get('/characters/filtered', [CharactersController::class, 'getFilteredCha
 
 
 
+
+
+/**
+ * ROUTES FOR CICAR WEB SERVICE
+ */
 Route::get('/cicar', [CicarController::class, 'obtenerListaDeZonas']);
+Route::get('/cicar/obtenermodelosdisponibles', [CicarController::class, 'obtenerModelosDisponibles']);
+Route::get('/cicar/obtenerlistadeoficinascompleto', [CicarController::class, 'obtenerlistaoficinas']);
