@@ -71,5 +71,5 @@ Route::get('/characters/filtered', [CharactersController::class, 'getFilteredCha
  * ROUTES FOR CICAR WEB SERVICE
  */
 Route::get('/cicar', [CicarController::class, 'obtenerListaDeZonas']);
+Route::get('/cicar/obtenerlistadeoficinasenzona', [CicarController::class, 'obtenerListaDeOficinasEnZona']);
 Route::get('/cicar/obtenermodelosdisponibles', [CicarController::class, 'obtenerModelosDisponibles']);
-Route::get('/cicar/obtenerlistadeoficinascompleto', [CicarController::class, 'obtenerlistaoficinas']);

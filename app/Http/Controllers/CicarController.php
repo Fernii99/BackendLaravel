@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use SoapClient;
@@ -23,7 +24,7 @@ class cicarController extends Controller
             ]);
 
         //  Call the ObtenerListaDeZonas operation
-            $result = $client->ObtenerListaDeOficinasEnZona("FUE", "ES");
+            $result = $client->ObtenerListaDeOficinasCompleto("ES");
 
             return $result;
 
@@ -60,22 +61,17 @@ class cicarController extends Controller
         $wsdl = 'http://extranet.cicar.com/webservices/soap/wsreservas.dll/wsdl/IReservas';
 
         $params = [
-            'Idioma' => "ES",
             'Empresa' => "K11",
             'Usuario' => "DitGes",
             'Clave' => "DitCan2023",
             'Tarifa' => $request->input('Tarifa', ''),
-            'FechaInicio' => $request->input('FechaInicio', ''),
-            'FechaFin' => $request->input('FechaFin', ''),
-            'Zona' => $request->input('Zona', ''),
-            'OfiEnt' => $request->input('OfiEnt', ''),
-            'OfiDev' => $request->input('OfiDev', ''),
-            "EntHotel" => $request->input('EntHotel', false), // Default to false if not provided
-            "DevHotel" => $request->input('DevHotel', false),
-            'SillasBebe' => $request->input('SillasBebe', 0), // Default to 0 if not provided
-            'Elevadores' => $request->input('Elevadores', 0),
-            'ConductoresAdicionales' => $request->input('ConductoresAdicionales', 0),
-            'Baca' => $request->input('Baca', false)
+            'Grupo' => $request->input('Grupo', ''),
+            'Zona' => $request->input('Zona', 'ACE'),
+            'OfiEnt' => $request->input('OfiEnt', '3K'),
+            'OfiDev' => $request->input('OfiEnt', '3K'),
+            'FIni' => $request->input('FechaInicio', date("Y-m-d H:i:s", strtotime("+15 days"))),
+            'FFin' => $request->input('FechaFin', date("Y-m-d H:i:s", strtotime("+20 days"))),
+            'Idioma' => $request->input('Idioma', 'ES'),
         ];
 
 
@@ -90,8 +86,8 @@ class cicarController extends Controller
                 'compression'  => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP | SOAP_COMPRESSION_DEFLATE
             ]);
 
+            $result = $client->ObtenerModelosEnGrupo("K11", "DitGes", "DitCan2023",  '', '','ACE', '3K', '3K', date("Y-m-d H:i:s", strtotime("+15 days")), date("Y-m-d H:i:s", strtotime("+20 days")), 'ES');
         //  Call the ObtenerListaDeZonas operation
-        $result = $client->ObtenerModelosDisponibles($params);
 
         return response()->json($result)
             ->header('Access-Control-Allow-Origin', '*')
@@ -105,7 +101,7 @@ class cicarController extends Controller
         }
     }
 
-    public function obtenerlistaoficinas()
+    public function obtenerListaDeOficinasEnZona(Request $request)
     {
         $wsdl = 'http://extranet.cicar.com/webservices/soap/wsreservas.dll/wsdl/IReservas';
 
@@ -119,14 +115,21 @@ class cicarController extends Controller
                 'compression'  => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP | SOAP_COMPRESSION_DEFLATE
             ]);
 
-        //  Call the ObtenerListaDeOficinas operation
-        $result = $client->obtenerlistadeoficinascompleto("ES");
+            $params = [
+                'Zona' => $request->input('zona'),   // Retrieve 'Zona' from the request
+                'Idioma' => "ES"  // Set the language code, e.g., Spanish
+            ];
 
-        return response()->json([
-            'status' => $result->ResultStatus,
-            'errorText' => $result->ResultErrorText,
-            'offices' => $result->OficinaArray,
-        ]);
+            var_dump($request->input());
+
+            //  Call the ObtenerListaDeOficinas operation
+            $result = $client->ObtenerListaDeOficinasEnZona($request->input('Zona'), "ES");
+
+            return response()->json([
+                'status' => $result->ResultStatus,
+                'errorText' => $result->ResultErrorText,
+                'offices' => $result->OficinaArray,
+            ]);
 
         } catch (\Exception $e) {
             // Handle any exceptions and return an error response
