@@ -81,8 +81,8 @@ class cicarController extends Controller
             'Zona' => $request->input('Zona', 'ACE'),
             'OfiEnt' => $request->input('OfiEnt', '3K'),
             'OfiDev' => $request->input('OfiEnt', '3K'),
-            'FechaInicio' => $request->input('FechaInicio', date("Y-m-d H:i:s", strtotime("+15 days"))),
-            'FechaFin' => $request->input('FechaFin', date("Y-m-d H:i:s", strtotime("+20 days"))),
+            'FechaInicio' => $request->input('FechaInicio'.'HoraInicio', date("Y-m-d H:i:s", strtotime("+1 days"))),
+            'FechaFin' => $request->input('FechaFin'.'HoraFin', date("Y-m-d H:i:s", strtotime("+2 days"))),
             'Idioma' => $request->input('Idioma', 'ES'),
             'EntHotel' => '',
             'DevHotel' => '',
@@ -108,32 +108,32 @@ class cicarController extends Controller
 
         $combinedResults = [];
 
-        foreach ($result['ModeloArray'] as $item1) {
+        foreach ($result->ModeloArray as $item1) {
             // Look for a matching item in the second response
-            foreach ($result2['ModeloDisponibleArray'] as $item2) {
-                if (isset($item1->stdClass) && isset($item2->stdClass) && $item1['Codigo'] == $item2['Codigo']) {
-                    // var_dump('item1:'.$item1. '       '. 'item2:'.$item2);
+            foreach ($result2->ModeloDisponibleArray as $item2) {
+                if ($item1->Codigo == $item2->Codigo) {
+                // var_dump('item1:'.$item1. '       '. 'item2:'.$item2);
                     // Create a new object with selected data from each item
                     $combinedResults[] = [
-                        'Codigo' => $item1['Codigo'],
-                        'Aire' => $item1['Aire'],
-                        'Capacidad'=> $item1['Capacidad'],
-                        'Categoria' => $item1['Categoria'],
-                        'Cierre' => $item1['Cierre'],
-                        'Direccion' => $item1['Direccion'],
-                        'Disponible' => $item1['Disponible'],
-                        'Elevalunas' => $item1['Elevalunas'],
-                        'Fotos' => $item1['Fotos'],
-                        'OnRequest' => $item1['OnRequest'],
-                        'Pax' => $item1['Pax'],
-                        'Portabultos' => $item1['Portabultos'],
-                        'Puertas' => $item1['Puertas'],
-                        'RadioCD' => $item1['RadioCD'],
-                        'Thumbnail' => $item1['Thumbnail'],
-                        'Nombre' => $item2['Nombre'],
-                        'Total' => $item2['Total'],
-                        'Impuestos' => $item2['Impuestos'],
-                        'BaseImponible' => $item2['BaseImponible'],
+                        'Codigo' => $item1->Codigo,
+                        'Aire' => $item1->Aire,
+                        'Capacidad'=> $item1->Capacidad,
+                        'Categoria' => $item1->Categoria,
+                        'Cierre' => $item1->Cierre,
+                        'Direccion' => $item1->Direccion,
+                        'Disponible' => $item1->Disponible,
+                        'Elevalunas' => $item1->Elevalunas,
+                        'Foto' => $item1->Foto,
+                        'OnRequest' => $item1->OnRequest,
+                        'Pax' => $item1->Pax,
+                        'Portabultos' => $item1->Portabultos,
+                        'Puertas' => $item1->Puertas,
+                        'RadioCD' => $item1->RadioCD,
+                        'Thumbnail' => $item1->Thumbnail,
+                        'Nombre' => $item2->Nombre,
+                        'Total' => $item2->Total,
+                        'Impuestos' => $item2->Impuestos,
+                        'BaseImponible' => $item2->BaseImponible,
                     ];
                 };
             };
