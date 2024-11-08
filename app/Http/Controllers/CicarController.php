@@ -28,28 +28,6 @@ class cicarController extends Controller
 
             return $result;
 
-        // $zones = [];
-        // if (isset($result->ZonaArray) && is_array($result->ZonaArray)) {
-        //     foreach ($result->ZonaArray as $zone) {
-        //         // Check if stdClass exists in each zone and access properties
-        //         if (isset($zone->stdClass)) {
-        //             $zoneData = $zone->stdClass;
-        //             $zones[] = [
-        //                 'code' => $zoneData->Codigo ?? null,
-        //                 'name' => $zoneData->Nombre ?? 'Unknown',
-        //                 'description' => $zoneData->Descripcion ?? ''
-        //             ];
-        //         }
-        //     }
-        // }
-
-
-        // return response()->json([
-        //     'status' => $result->ResultStatus,
-        //     'errorText' => $result->ResultErrorText,
-        //     'zones' => $result->ZonaArray,
-        // ]);
-
         } catch (\Exception $e) {
             // Handle any exceptions and return an error response
             return response()->json(['error' => $e->getMessage()], 500);
