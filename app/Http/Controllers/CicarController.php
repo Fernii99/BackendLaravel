@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Vehicle;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -82,43 +83,78 @@ class cicarController extends Controller
 
             $result = $client->ObtenerModelosEnGrupo($Empresa,  $Usuario, $Clave,  '', '', $Zona, $OfiEnt, $OfiDev, $FIni, $FFin, $Idioma);
             $result2 = $client->ObtenerModelosDisponibles($params); // First response
-        //  Call the ObtenerListaDeZonas operation
 
-        $combinedResults = [];
+
+        //  Call the ObtenerListaDeZonas operation
+        $vehicleModel = new Vehicle();
+        $availableModels = [];
+        $vehicleTypes = []; // Array to store vehicle types
+
+        foreach ($result2->ModeloDisponibleArray as $item2) {
+            $availableModels[$item2->Codigo] = $item2;
+        }
 
         foreach ($result->ModeloArray as $item1) {
-            // Look for a matching item in the second response
-            foreach ($result2->ModeloDisponibleArray as $item2) {
-                if ($item1->Codigo == $item2->Codigo) {
-                // var_dump('item1:'.$item1. '       '. 'item2:'.$item2);
-                    // Create a new object with selected data from each item
-                    $combinedResults[] = [
-                        'Codigo' => $item1->Codigo,
-                        'Aire' => $item1->Aire,
-                        'Capacidad'=> $item1->Capacidad,
-                        'Categoria' => $item1->Categoria,
-                        'Cierre' => $item1->Cierre,
-                        'Direccion' => $item1->Direccion,
-                        'Disponible' => $item1->Disponible,
-                        'Elevalunas' => $item1->Elevalunas,
-                        'Foto' => $item1->Foto,
-                        'OnRequest' => $item1->OnRequest,
-                        'Pax' => $item1->Pax,
-                        'Portabultos' => $item1->Portabultos,
-                        'Puertas' => $item1->Puertas,
-                        'RadioCD' => $item1->RadioCD,
-                        'Thumbnail' => $item1->Thumbnail,
-                        'Nombre' => $item2->Nombre,
-                        'Total' => $item2->Total,
-                        'Impuestos' => $item2->Impuestos,
-                        'BaseImponible' => $item2->BaseImponible,
-                    ];
-                };
-            };
-        };
+            if (isset($availableModels[$item1->Codigo])) {
+                $item2 = $availableModels[$item1->Codigo];
 
-        return $combinedResults;
-
+                // Add vehicle data with the matching item
+                $vehicleData = $vehicleModel->addVehicle(
+                    $item1->Codigo ?? "",
+                    $item1->Disponible ? "Available" : "NotAvailable",
+                    $item1->Categoria ??  "",
+                    $item1->Portabultos ?? "",
+                    $item1->Nombre ?? "",
+                    $item1->Codigo ?? "",
+                    $item1->Foto ?? "",
+                    $item1->Capacidad ?? "",
+                    $item1->Pax ?? "",
+                    $item1->Puertas ?? "",
+                    $item2->BaseImponible ?? "",
+                    $item2->Total ?? "",
+                    $item2->TotalMargenDitChargeS ?? "",
+                    $item1->SupImg ?? "",
+                    $item2->TotalPVPCharge ?? "",
+                    $item2->Currency ?? "EUR",
+                    $item1->RateQualifier ?? "",
+                    $item1->Aire ? "Y" : "N",
+                    $item1->Direccion ? "Y" : "N",
+                    $item2->Grupo ? "" : "",
+                    $item1->CarDescription ?? "",
+                    $item1->Features ?? "",
+                    $item1->SupplierCode ?? "CC",
+                    $item1->Supplier ?? "Cicar",
+                    $item1->SupplierDetails ?? "",
+                    $item1->LocationType ?? "",
+                    $item1->FuelSurChargeVal ?? 0,
+                    $item1->FuelSurChargeCur ?? 0,
+                    $item1->ExcessVal ?? "",
+                    $item1->ExcessCur ?? "",
+                    $item1->FuelChargeVal ?? 0,
+                    $item1->FuelChargeCur ?? 0,
+                    $item1->Anotation ?? [
+                        "FUEL - Full to Full",
+                        "EXCESS - Standard Excess",
+                        "OTHER COSTS - Excess:775:EUR,Deposit:975:EUR",
+                        "CANCELLATIONS - No se aplican gastos",
+                        "NO SHOWS - No se aplican gastos"
+                    ],
+                    $item1->DropCharge ?? 0,
+                    $item1->DropChargeCurrency ?? "EUR",
+                    $item1->ProductCostsL ?? "",
+                    $item1->ProductCostsS ?? "https://prodxml-2.vpackage.net/coches/public/TandC/Cicar.html",
+                    $item1->TandCURL ?? "",
+                    $item1->FuelPolicy ?? "Los coches se entregar\u00e1n con el tanque lleno y se tendr\u00e1n que devolver con el tanque lleno. De lo contrario el cliente tendr\u00e1 que pagar por el combustible que falta, m\u00e1s un suplemento por el servicio de repostaje.Es importante que justo antes de devolver el coche, el cliente reposte a menos de 10 km aprox de distancia de la oficina de devoluci\u00f3n y que conserve el ticket de caja de la gasolinera.",
+                    $item1->ExcessPolicy ?? "El importe de la Franquicia por da\u00f1os y robo es (tasas locales no incluidas): - MBMR, MBAR, ECMR, EDAH - 670.00 EURCDMR, CGMH, DCMR, CBMR, EXMR - 775.00 EURIMMR, IVMR, JGMR - 790.00 EURNBAE, EDAE, IMAR, DDAH, CCAR - 805.00 EURIDMR - 840.00 EURETMN - 880.00 EURLVMR - 980.00 EURFVMR, CDAE - 1015.00 EURIFMR, DGAR, IGAH - 1080.00 EURJDAV, RGDR, SGAR, JFDR, GFAR, IGAR - 1800.00 EURUFAR - 2200.00 EUR ",
+                    $item1->ERP ?? 0,
+                    $item1->idOp ?? "",
+                    $item1->Codigo ?? "",
+                    $item2->TotalPVPChargeLCCoin ?? ""
+                );
+                $vehicleTypes[] = $vehicleData;
+            }
+        }
+            return $vehicleTypes;
         } catch (\Exception $e) {
             // Handle any exceptions and return an error response
             return response()->json(['error' => $e->getMessage()], 500);

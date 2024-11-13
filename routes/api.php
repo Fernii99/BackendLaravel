@@ -9,6 +9,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\cicarController;
+use App\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -73,5 +74,5 @@ Route::get('/characters/filtered', [CharactersController::class, 'getFilteredCha
 Route::get('/cicar', [CicarController::class, 'obtenerListaDeZonas']);
 Route::get('/cicar/obtenerlistadeoficinasenzona', [CicarController::class, 'obtenerListaDeOficinasEnZona']);
 
-Route::get('/cicar/obtenermodelosdisponiblesengrupo', [CicarController::class, 'obtenerModelosDisponiblesEnGrupo']);
+Route::get('/cicar/obtenermodelosdisponiblesengrupo', [VehicleController::class, 'obtenerListaCombinada']);
 Route::get('/cicar/obtenermodelosdisponibles', [CicarController::class, 'obtenerModelosDisponibles']);
