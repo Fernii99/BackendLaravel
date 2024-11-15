@@ -23,6 +23,7 @@ class VehicleController extends Controller
     public function obtenerListaCombinada(Request $request): JsonResponse
     {
         try {
+
             // Call methods from each controller
             $result1 = $this->CicarController->obtenerModelosDisponiblesEnGrupo($request);
             $result2 = $this->FlexibleController->ObtenerListaDeVehiculos();

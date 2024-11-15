@@ -133,11 +133,11 @@ class cicarController extends Controller
                     $item1->FuelChargeVal ?? 0,
                     $item1->FuelChargeCur ?? 0,
                     $item1->Anotation ?? [
-                        "FUEL - Full to Full",
-                        "EXCESS - Standard Excess",
-                        "OTHER COSTS - Excess:775:EUR,Deposit:975:EUR",
-                        "CANCELLATIONS - No se aplican gastos",
-                        "NO SHOWS - No se aplican gastos"
+                        "FUEL - Full to Full ",
+                        "EXCESS - Standard Excess ",
+                        "OTHER COSTS - Excess:775:EUR,Deposit:975:EUR ",
+                        "CANCELLATIONS - No se aplican gastos ",
+                        "NO SHOWS - No se aplican gastos "
                     ],
                     $item1->DropCharge ?? 0,
                     $item1->DropChargeCurrency ?? "EUR",
