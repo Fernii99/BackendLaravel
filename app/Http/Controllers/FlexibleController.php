@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Services\Vehicle;
 
 class FlexibleController extends Controller
@@ -17,7 +16,7 @@ class FlexibleController extends Controller
         $vehicleTypes = []; // Array to store vehicle types
 
         foreach ($vehicles as $vehicle) {
-           $vehicleData = $vehicleModel->addVehicle(
+            $vehicleData = $vehicleModel->addVehicle(
                 $vehicle['InsertStatId'] ?? null,
                 $vehicle['Status'] ?? null,
                 $vehicle['Category'] ?? null,

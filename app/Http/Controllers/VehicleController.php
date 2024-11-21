@@ -6,6 +6,7 @@ use App\Http\Controllers\FlexibleController;
 use App\Http\Controllers\CicarController;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class VehicleController extends Controller
 {
@@ -22,25 +23,42 @@ class VehicleController extends Controller
 
     public function obtenerListaCombinada(Request $request): JsonResponse
     {
+        // Decode as an associative array
+        $zona = $request->input('zona');
+
         try {
 
-            // Call methods from each controller
-            $result1 = $this->CicarController->obtenerModelosDisponiblesEnGrupo($request);
+            $values = [
+                'Empresa' => "K11",
+                'Usuario' => "DitGes",
+                'Clave' => "DitCan2023",
+                'Tarifa' => $zona['Tarifa'],
+                'Grupo' => $zona['Grupo'],
+                'FechaInicio' => $zona['FechaInicio'],
+                'HoraInicio' => $zona['HoraInicio'],
+                'FechaFin' => $zona['FechaFin'],
+                'HoraFin' => $zona['HoraFin'],
+                'Zona' => $zona['Zona'],
+                'OfiEnt' => $zona['OfiEnt'],
+                'OfiDev' => $zona['OfiDev'],
+                'EntHotel' => $zona['EntHotel'],
+                'DevHotel' => $zona['DevHotel'],
+                'Oficina' => $zona['Oficina'],
+            ];
+
+            // Fetch data from controllers
+            $result1 = $this->CicarController->obtenerModelosDisponiblesEnGrupo($values);
             $result2 = $this->FlexibleController->ObtenerListaDeVehiculos();
 
-            // Check if results are arrays and merge them
-            $combinedResults = array_merge(
-                $result1 ?? [],
-                $result2 ?? []
-            );
+            // Merge results
+            $combinedResults = array_merge($result1 ?? [], $result2 ?? []);
 
             // Return combined data as JSON
             return response()->json(['data' => $combinedResults]);
 
-        } catch (\Exception $e) {
+            } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
-
     }
 
 
