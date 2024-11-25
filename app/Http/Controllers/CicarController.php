@@ -43,26 +43,22 @@ class cicarController extends Controller
 
 
     $params = [
+        'Idioma' => "ES",
         'Empresa' => "K11",
         'Usuario' => "DitGes",
         'Clave' => "DitCan2023",
         'Tarifa' => $data['Tarifa'],
-        'Grupo' => $data['Grupo'],
-        'FechaInicio' => $data['FechaInicio'],
-        'HoraInicio' => $data['HoraInicio'],
-        'FechaFin' => $data['FechaFin'],
-        'HoraFin' => $data['HoraFin'],
+        'FechaInicio' => strtotime($data['FechaInicio'].$data['HoraInicio']),
+        'FechaFin' => strtotime($data['FechaFin'].$data['HoraFin']),
         'Zona' => $data['Zona'],
         'OfiEnt' => $data['OfiEnt'],
         'OfiDev' => $data['OfiDev'] ,
         'EntHotel' => $data['EntHotel'],
         'DevHotel' => $data['DevHotel'],
-        'Oficina' => $data['Oficina'],
         'SillasBebe' => 0,
         'Elevadores' => 0,
         'ConductoresAdicionales' => 0,
         'Baca' => false,
-        'Idioma' => "ES"
     ];
 
     try {
@@ -112,7 +108,7 @@ class cicarController extends Controller
 
                     $vehicleData = $vehicleModel->addVehicle(
                         $item1->Codigo ?? "",
-                        $item1->Disponible ? "Available" : "NotAvailable",
+                        $item1->Disponible && $item2->Disponible ? "Available" : "Not Available",
                         $item1->Categoria ?? "",
                         $item1->Portabultos ?? "",
                         $item1->Nombre ?? "",
