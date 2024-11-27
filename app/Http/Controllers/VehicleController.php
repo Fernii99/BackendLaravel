@@ -50,8 +50,12 @@ class VehicleController extends Controller
             $result1 = $this->CicarController->obtenerModelosDisponiblesEnGrupo($values);
             $result2 = $this->FlexibleController->ObtenerListaDeVehiculos();
 
-            // Merge results
+
+
             $combinedResults = array_merge($result1 ?? [], $result2 ?? []);
+            usort($combinedResults, function ($a, $b) {
+                return $a['Total'] <=> $b['Total'];
+            });
 
             // Return combined data as JSON
             return response()->json(['data' => $combinedResults]);

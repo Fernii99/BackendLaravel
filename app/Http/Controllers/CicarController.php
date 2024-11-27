@@ -38,7 +38,6 @@ class cicarController extends Controller
     public function obtenerModelosDisponiblesEnGrupo($data)
 {
 
-
     $wsdl = 'http://extranet.cicar.com/webservices/soap/wsreservas.dll/wsdl/IReservas';
 
 
@@ -97,70 +96,73 @@ class cicarController extends Controller
 
         if (isset($result2->ModeloDisponibleArray) && is_array($result2->ModeloDisponibleArray)) {
             foreach ($result2->ModeloDisponibleArray as $item2) {
-                $availableModels[$item2->Codigo] = $item2;
-            }
-        }
+                // Check if there's a matching item in $result->ModeloArray
+                $matchingItem1 = null;
 
-        if (isset($result->ModeloArray) && is_array($result->ModeloArray)) {
-            foreach ($result->ModeloArray as $item1) {
-                if (isset($availableModels[$item1->Codigo])) {
-                    $item2 = $availableModels[$item1->Codigo];
-
-                    $vehicleData = $vehicleModel->addVehicle(
-                        $item1->Codigo ?? "",
-                        $item1->Disponible && $item2->Disponible ? "Available" : "Not Available",
-                        $item1->Categoria ?? "",
-                        $item1->Portabultos ?? "",
-                        $item1->Nombre ?? "",
-                        $item1->Codigo ?? "",
-                        "https://www.cicar.com/" . ($item1->Foto ?? ""),
-                        $item1->Capacidad ?? "",
-                        (string)$item1->Pax ?? null,
-                        $item1->Puertas ?? "",
-                        $item2->TipoTarifa ?? null,
-                        (string)$item2->Total ?? "",
-                        $item2->TotalMargenDitChargeS ?? "",
-                        $item1->SupImg ?? "",
-                        $item2->TotalPVPCharge ?? "",
-                        $item2->Currency ?? "EUR",
-                        $item1->RateQualifier ?? "",
-                        $item1->Aire ? "Y" : "N",
-                        $item1->Direccion ? "Y" : "N",
-                        $item2->Categoria ?? null,
-                        $item1->CarDescription ?? "",
-                        $item1->Features ?? "",
-                        $item1->SupplierCode ?? "CC",
-                        $item1->Supplier ?? "Cicar",
-                        $item1->SupplierDetails ?? "",
-                        $item1->LocationType ?? "",
-                        $item1->FuelSurChargeVal ?? 0,
-                        $item1->FuelSurChargeCur ?? 0,
-                        $item1->ExcessVal ?? "",
-                        $item1->ExcessCur ?? "",
-                        $item1->FuelChargeVal ?? 0,
-                        $item1->FuelChargeCur ?? 0,
-                        $item1->Anotation ?? [
-                            "FUEL - Full to Full",
-                            "EXCESS - Standard Excess",
-                            "OTHER COSTS - Excess:744.00:EUR,Deposit:750:EUR",
-                            "CANCELLATIONS - No se aplican gastos",
-                            "NO SHOWS - En caso de no recoger el coche (no show) los gastos son: Tarifa Estándar 100.00 EUR,"
-                        ],
-                        $item1->DropCharge ?? 0,
-                        $item1->DropChargeCurrency ?? "EUR",
-                        $item1->ProductCostsL ?? "",
-                        $item1->ProductCostsS ?? "https://prodxml-2.vpackage.net/coches/public/TandC/Cicar.html",
-                        $item1->TandCURL ?? "",
-                        $item1->FuelPolicy ?? "",
-                        $item1->ExcessPolicy ?? "",
-                        $item1->ERP ?? 0,
-                        $item1->idOp ?? "",
-                        $item1->Codigo ?? "",
-                        $item2->TotalPVPChargeLCCoin ?? ""
-                    );
-
-                    $vehicleTypes[] = $vehicleData;
+                if (isset($result->ModeloArray) && is_array($result->ModeloArray)) {
+                    foreach ($result->ModeloArray as $item1) {
+                        if ($item1->Codigo === $item2->Codigo) {
+                            $matchingItem1 = $item1; // Found matching item
+                            break;
+                        }
+                    }
                 }
+
+                // Create vehicle using $item2 as the primary data source, with enrichment from $matchingItem1
+                $vehicleData = $vehicleModel->addVehicle(
+                    $item2->Codigo ?? "",
+                    ($matchingItem1 && $matchingItem1->Disponible && $item2->Disponible) ? "Available" : "Not Available",
+                    $matchingItem1->Categoria ?? "",
+                    $matchingItem1->Portabultos ?? "",
+                    $matchingItem1->Nombre ?? $item2->Nombre ?? "",
+                    $item2->Codigo ?? "",
+                    "https://www.cicar.com/" . ($matchingItem1->Foto ?? ""),
+                    $matchingItem1->Capacidad ?? "",
+                    (string)($matchingItem1->Pax ?? null),
+                    $matchingItem1->Puertas ?? "",
+                    $item2->TipoTarifa ?? null,
+                    (string)$item2->Total ?? "",
+                    $item2->TotalMargenDitChargeS ?? "",
+                    $matchingItem1->SupImg ?? "",
+                    $item2->TotalPVPCharge ?? "",
+                    $item2->Currency ?? "EUR",
+                    $matchingItem1->RateQualifier ?? "",
+                    $matchingItem1->Aire ? "Y" : "N",
+                    $matchingItem1->Direccion ? "Y" : "N",
+                    $item2->Categoria ?? null,
+                    $matchingItem1->CarDescription ?? "",
+                    $matchingItem1->Features ?? "",
+                    $matchingItem1->SupplierCode ?? "CC",
+                    $matchingItem1->Supplier ?? "Cicar",
+                    $matchingItem1->SupplierDetails ?? "",
+                    $matchingItem1->LocationType ?? "",
+                    $matchingItem1->FuelSurChargeVal ?? 0,
+                    $matchingItem1->FuelSurChargeCur ?? 0,
+                    $matchingItem1->ExcessVal ?? "",
+                    $matchingItem1->ExcessCur ?? "",
+                    $matchingItem1->FuelChargeVal ?? 0,
+                    $matchingItem1->FuelChargeCur ?? 0,
+                    $matchingItem1->Anotation ?? [
+                        "FUEL - Full to Full",
+                        "EXCESS - Standard Excess",
+                        "OTHER COSTS - Excess:744.00:EUR,Deposit:750:EUR",
+                        "CANCELLATIONS - No se aplican gastos",
+                        "NO SHOWS - En caso de no recoger el coche (no show) los gastos son: Tarifa Estándar 100.00 EUR,"
+                    ],
+                    $matchingItem1->DropCharge ?? 0,
+                    $matchingItem1->DropChargeCurrency ?? "EUR",
+                    $matchingItem1->ProductCostsL ?? "",
+                    $matchingItem1->ProductCostsS ?? "https://prodxml-2.vpackage.net/coches/public/TandC/Cicar.html",
+                    $matchingItem1->TandCURL ?? "",
+                    $matchingItem1->FuelPolicy ?? "",
+                    $matchingItem1->ExcessPolicy ?? "",
+                    $matchingItem1->ERP ?? 0,
+                    $matchingItem1->idOp ?? "",
+                    $item2->Codigo ?? "",
+                    $item2->TotalPVPChargeLCCoin ?? ""
+                );
+
+                $vehicleTypes[] = $vehicleData;
             }
         }
 
