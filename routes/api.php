@@ -9,6 +9,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\cicarController;
+use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\VehicleController;
 use Illuminate\Support\Facades\Route;
 
@@ -56,15 +57,11 @@ Route::get('/brands/{id}', [BrandController::class, 'show']);       // GET a spe
 Route::put('/brands/{id}', [BrandController::class, 'update']);     // PUT update brand
 Route::delete('/brands/{id}', [BrandController::class, 'destroy']); // DELETE brand
 
-
 /**
  ** ROUTES TO EXTERNAL API ROUTES
  */
 Route::get('/characters/getall', [CharactersController::class, 'getAllCharacters']);
 Route::get('/characters/filtered', [CharactersController::class, 'getFilteredCharacters']);
-
-
-
 
 
 /**
@@ -75,3 +72,10 @@ Route::get('/cicar/obtenerlistadeoficinasenzona', [CicarController::class, 'obte
 
 Route::get('/cicar/obtenerlistacombinada', [VehicleController::class, 'obtenerListaCombinada']);
 Route::get('/cicar/obtenermodelosdisponibles', [CicarController::class, 'obtenerModelosDisponibles']);
+
+
+
+/**
+*** ROUTES TO EXTERNAL API ROUTES
+**/
+Route::get('/verifyPayments', [PaymentsController::class, 'verificarDiasDePago']);

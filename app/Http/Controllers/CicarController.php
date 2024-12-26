@@ -161,7 +161,6 @@ class cicarController extends Controller
                     $item2->Codigo ?? "",
                     $item2->TotalPVPChargeLCCoin ?? ""
                 );
-
                 $vehicleTypes[] = $vehicleData;
             }
         }
@@ -177,7 +176,6 @@ class cicarController extends Controller
 
         // Your WSDL and parameters for both requests
         $wsdl = 'http://extranet.cicar.com/webservices/soap/wsreservas.dll/wsdl/IReservas';
-
 
         $params = [
             'Empresa' => "K11",

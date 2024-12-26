@@ -18,8 +18,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/cars', function() {
-    return view('cars');
+Route::get('/payments', function() {
+    return view('payments');
 });
 
 // Route::get('/cars', [CarController::class, 'index']);
